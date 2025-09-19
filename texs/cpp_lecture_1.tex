@@ -1,0 +1,143 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage{fontspec}          % вместо inputenc и fontenc
+\setmainfont{Times New Roman}  % можно поменять на "Arial", "Helvetica", "Courier New"
+\setmonofont{PT Mono}
+\usepackage[russian]{babel}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{geometry}
+\geometry{margin=2cm}
+
+\lstset{
+  language=C++,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blue},
+  commentstyle=\color{gray},
+  stringstyle=\color{red},
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  keepspaces=true,
+  tabsize=2
+}
+
+\title{Конспект первой лекции}
+\author{Приходько Павел}
+\date{05.09.2025}
+
+\begin{document}
+\maketitle
+
+\section{Переменные: определение и объявление}
+\begin{lstlisting}
+int x = 9;    // определение
+int y;        // объявление
+extern int z; // объявление ( o том что переменная есть в другом файле)
+\end{lstlisting}
+
+\begin{itemize}
+  \item Глобальная переменная по умолчанию инициализируется 0.
+  \item Определение создаёт переменную и выделяет память.
+  \item Объявление сообщает компилятору, что переменная есть.
+  \item Extern говорит компилятору, что переменная находится в другом файле.
+\end{itemize}
+
+\section{Функции: объявление и определение}
+\begin{lstlisting}
+void f(); // объявление
+void f(); // повторное объявление
+
+int g()
+{
+    return 5;
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item Объявление функции сообщает компилятору имя и параметры. (Допустимы множественные объявления, в отличие от определений)
+  \item Определение функции содержит реализацию.
+  \item Возвращаемый тип не входит в сигнатуру (нельзя перегружать только по return type).
+\end{itemize}
+
+\section{Пространства имён (namespace)}
+\begin{lstlisting}
+namespace test // Тестовый неймспейс
+{
+    int x = 0;
+}
+
+namespace test // Дополнение
+{
+    int y = 0;
+}
+
+namespace     // Анонимный неймспейс
+{
+    int z = 111;
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item namespace помогает организовывать код и избегать конфликтов имён.
+  \item Одно пространство имён можно расширять (см. два блока namespace test).
+  \item Существуют анонимные namespace, ограничивающие область видимости внутри файла. Т.е. z будет доступно только внутри текущего файла.
+\end{itemize}
+
+\section{Главная функция \texttt{main}}
+
+\subsection{Переменные из локальной, глобальной области и namespace}
+\begin{lstlisting}
+int main()
+{
+    int x = 5;                         // local переменная
+    std::cout << x << std::endl;       // вывод local переменной
+    std::cout << ::x << std::endl;     // вывод global переменной
+    std::cout << test::x << std::endl; // вывод переменной из namespace
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item Локальная переменная перекрывает глобальную с тем же именем.
+  \item Чтобы обратиться к глобальной переменной, используется оператор \texttt{::}.
+  \item Для переменных в namespace указываем \texttt{имя\_пространства::имя}.
+\end{itemize}
+
+\section{Изменение переменной из namespace}
+\begin{lstlisting}
+int main()
+{
+    test::x = 1; 
+    test::x += 1;             
+    std::cout << test::x << std::endl;
+}
+[Output]: 2
+\end{lstlisting}
+
+\begin{itemize}
+  \item Переменные внутри namespace можно изменять и к ним можно обращаться через \texttt{имя\_пространства::}.
+\end{itemize}
+
+\section{Определение функции (которую мы раньше объявили)}
+\begin{lstlisting}
+void f()
+{ 
+    std::cout << "Keke" << std::endl;
+}
+\end{lstlisting}
+
+\begin{itemize}
+  \item Определение функции \texttt{f}, которую мы объявили в начале файла, 
+  может находиться даже в конце файла.
+\end{itemize}
+
+\section{Вызов функции с \texttt{void}-возвратом}
+\begin{lstlisting}
+    std::cout << f(); // нельзя
+\end{lstlisting}
+
+\begin{itemize}
+  \item Функции, возвращающие \texttt{void}, нельзя передавать в \texttt{std::cout}.
+  \item Для вызова такой функции достаточно написать \texttt{f();}.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,13 @@
+def: f,g : N->N f=O(g) => exist c f(n) <= C*g(n)
+
+sum
+for l in 1...n:
+    while xum <= k:
+        r++
+
+
+f(mid):
+    l,r = -1
+    for ai:
+        if ai < mid:
+            
